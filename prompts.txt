@@ -1,7 +1,10 @@
 # AI Prompts Used for Development
 
-**Agent**: Gemini CLI - Antigravity
-**Platform**: Google Gemini Advanced
+**Agent**: Gemini CLI - Antigravity  
+**Platform**: Google Gemini Advanced  
+**Date**: February 3, 2026
+
+---
 
 ## Prompt 1 (Initial Request)
 
@@ -9,11 +12,13 @@
 @[Django Assessment.pdf] it's a assessment, implement it following industry standards and best practices
 ```
 
-This was the initial prompt that included the PDF assessment document. The AI agent:
-1. Extracted text from the PDF to understand requirements
-2. Created a comprehensive implementation plan
-3. Identified the need for PostgreSQL and Redis
-4. Designed the architecture for atomic, thread-safe transfers
+**AI Actions:**
+- Extracted text from the PDF to understand requirements
+- Created a comprehensive implementation plan
+- Identified the need for PostgreSQL and Redis
+- Designed the architecture for atomic, thread-safe transfers
+
+---
 
 ## Prompt 2 (Environment Setup)
 
@@ -21,10 +26,12 @@ This was the initial prompt that included the PDF assessment document. The AI ag
 no, i don't have PostgreSQL and Redis
 ```
 
-The AI agent then:
-1. Attempted to install PostgreSQL and Redis via winget
-2. Successfully installed Redis
-3. PostgreSQL installation faced 403 errors, requiring manual installation
+**AI Actions:**
+- Attempted to install PostgreSQL and Redis via winget
+- Successfully installed Redis
+- PostgreSQL installation faced 403 errors, requiring manual installation
+
+---
 
 ## Prompt 3 (Continue After Manual Setup)
 
@@ -34,24 +41,142 @@ i configured PostgresSQL manually, created database with name 'assessment' updat
 continue implementation
 ```
 
-The AI agent then proceeded to:
-1. Create all project files (models, views, serializers, tasks)
-2. Set up Celery configuration
-3. Write comprehensive test suites
-4. Create documentation
+**AI Actions:**
+- Created all project files (models, views, serializers, tasks)
+- Set up Celery configuration
+- Wrote comprehensive test suites
+- Created documentation (README.md)
+
+---
+
+## Prompt 4 (Frontend Request)
+
+```
+now, i want a front-end for this assessment
+```
+
+**AI Actions:**
+- Added CORS headers support to Django backend
+- Created transaction history and user list API endpoints
+- Built modern HTML/CSS/JS dashboard with:
+  - Login screen with Basic Auth
+  - Wallet balance display
+  - Transfer form
+  - Deposit form
+  - Transaction history
+
+---
+
+## Prompt 5 (Dependency Issue)
+
+```
+py manage.py runserver
+ModuleNotFoundError: No module named 'corsheaders'
+```
+
+**AI Actions:**
+- Installed `django-cors-headers` in the virtual environment
+
+---
+
+## Prompt 6 (Dummy Data Request)
+
+```
+as it's assessment and there's no functionalities for users, so i want to handle populate dumy data for users
+```
+
+**AI Actions:**
+- Created management command `populate_data`
+- Added 5 test users (alice, bob, charlie, diana, eve) with wallets
+- Created sample transactions for testing
+
+---
+
+## Prompt 7 (Frontend Error)
+
+```
+Unexpected token '<', "<!DOCTYPE "... is not valid JSON i'm getting this error when click on send transfer
+```
+
+**AI Actions:**
+- Identified CSRF protection issue with SessionAuthentication
+- Reordered authentication classes to prioritize BasicAuthentication
+- Added explicit CORS headers configuration
+
+---
+
+## Prompt 8 (500 Error)
+
+```
+transaction is performing but still give error on front end
+```
+
+**AI Actions:**
+- Improved JavaScript error handling for non-JSON responses
+- Better error message display
+
+---
+
+## Prompt 9 (Server Error Fix)
+
+```
+now it's giving Server error: 500 Internal Server Error
+```
+
+**AI Actions:**
+- Wrapped Celery task call in try-except
+- Transfer now works even if Celery/Redis is not running
+
+---
+
+## Prompt 10 (Receipt Generation)
+
+```
+why it's not generating "Transaction Receipt" ?
+```
+
+**AI Actions:**
+- Installed `redis` Python package in virtual environment
+- Started Celery worker
+- Receipts now generate as PDFs in `media/receipts/`
+
+---
+
+## Prompt 11 (Hide Admin User)
+
+```
+i don't want to show my root user, i just want to show dumy users on front-end
+```
+
+**AI Actions:**
+- Updated `UserListView` to exclude superusers and staff
+- Only regular test users now appear in the transfer dropdown
+
+---
+
+## Prompt 12 (Update README)
+
+```
+@[Django Assessment.pdf] update readme file with submission guidelines
+```
+
+**AI Actions:**
+- Added Frontend Dashboard section
+- Added Management Commands section
+- Added Submission Guidelines
+- Added Evaluation Criteria checklist
 
 ---
 
 ## Summary
 
-The prompts were **atomic** - each prompt was minimal and focused:
-1. Initial request with the assessment document
-2. Environment clarification
-3. Manual setup notification and continue
+| Category | Prompts |
+|----------|---------|
+| Initial Setup | 3 |
+| Frontend Development | 1 |
+| Bug Fixes | 5 |
+| Feature Requests | 2 |
+| Documentation | 1 |
+| **Total** | **12** |
 
-The AI agent handled the **molecular** complexity internally by:
-- Breaking down the assessment requirements into subtasks
-- Creating a structured implementation plan
-- Implementing thread-safety with `select_for_update`
-- Writing comprehensive tests including concurrency tests
-- Generating all documentation
+The AI agent handled complex implementation tasks through minimal, focused prompts. Each prompt triggered multiple internal actions including code generation, debugging, and documentation.
