@@ -232,3 +232,73 @@ class DepositView(APIView):
             'message': 'Deposit successful',
             'balance': wallet.balance,
         })
+
+
+class TransactionHistoryView(APIView):
+    """
+    GET /api/wallet/transactions/
+    
+    Get the transaction history for the authenticated user.
+    """
+    
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        """Return the user's transaction history."""
+        user = request.user
+        
+        # Get transactions where user is sender or receiver
+        sent = Transaction.objects.filter(sender=user).select_related('receiver')
+        received = Transaction.objects.filter(receiver=user).select_related('sender')
+        
+        # Combine and format
+        transactions = []
+        
+        for tx in sent:
+            transactions.append({
+                'id': tx.id,
+                'type': 'sent',
+                'counterparty': tx.receiver.username,
+                'counterparty_id': tx.receiver.id,
+                'amount': str(tx.amount),
+                'timestamp': tx.timestamp.isoformat(),
+                'receipt_path': tx.receipt_path,
+            })
+        
+        for tx in received:
+            transactions.append({
+                'id': tx.id,
+                'type': 'received',
+                'counterparty': tx.sender.username,
+                'counterparty_id': tx.sender.id,
+                'amount': str(tx.amount),
+                'timestamp': tx.timestamp.isoformat(),
+                'receipt_path': tx.receipt_path,
+            })
+        
+        # Sort by timestamp descending
+        transactions.sort(key=lambda x: x['timestamp'], reverse=True)
+        
+        return Response({
+            'transactions': transactions,
+            'count': len(transactions),
+        })
+
+
+class UserListView(APIView):
+    """
+    GET /api/wallet/users/
+    
+    Get a list of all users (for transfer dropdown).
+    """
+    
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        """Return list of users excluding current user."""
+        users = User.objects.exclude(id=request.user.id).values('id', 'username')
+        
+        return Response({
+            'users': list(users),
+        })
+

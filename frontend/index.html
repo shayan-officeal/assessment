@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atomic Wallet | Secure Transfers</title>
+    <meta name="description" content="A secure, thread-safe internal credit transfer system">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Section -->
+    <section id="login-section" class="auth-section">
+        <div class="auth-container">
+            <div class="auth-card glass">
+                <div class="auth-header">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h1>Atomic Wallet</h1>
+                    </div>
+                    <p class="subtitle">Secure & Thread-Safe Transfers</p>
+                </div>
+                
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required autocomplete="username" placeholder="Enter your username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <span>Sign In</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </form>
+                
+                <div id="login-error" class="error-message hidden"></div>
+            </div>
+            
+            <div class="auth-footer">
+                <p>Built with Django REST Framework • PostgreSQL • Celery</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard-section" class="dashboard-section hidden">
+        <nav class="navbar glass">
+            <div class="nav-brand">
+                <div class="logo-icon small">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span>Atomic Wallet</span>
+            </div>
+            <div class="nav-user">
+                <span id="nav-username">Welcome, User</span>
+                <button id="logout-btn" class="btn btn-ghost">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </nav>
+
+        <main class="dashboard-main">
+            <div class="dashboard-grid">
+                <!-- Balance Card -->
+                <div class="card balance-card glass">
+                    <div class="card-header">
+                        <h2>Wallet Balance</h2>
+                        <button id="refresh-balance" class="btn btn-icon" title="Refresh Balance">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 4v6h-6"/>
+                                <path d="M1 20v-6h6"/>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="balance-amount">
+                        <span class="currency">$</span>
+                        <span id="balance-value">0.00</span>
+                    </div>
+                    <div class="balance-label">Available Balance</div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card actions-card glass">
+                    <div class="card-header">
+                        <h2>Quick Actions</h2>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="show-transfer-btn" class="action-btn">
+                            <div class="action-icon send">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                </svg>
+                            </div>
+                            <span>Send Money</span>
+                        </button>
+                        <button id="show-deposit-btn" class="action-btn">
+                            <div class="action-icon receive">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <polyline points="19 12 12 19 5 12"/>
+                                </svg>
+                            </div>
+                            <span>Deposit</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Transfer Form -->
+                <div id="transfer-card" class="card transfer-card glass hidden">
+                    <div class="card-header">
+                        <h2>Send Money</h2>
+                        <button id="close-transfer" class="btn btn-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="transfer-form">
+                        <div class="form-group">
+                            <label for="receiver">Recipient</label>
+                            <select id="receiver" name="receiver" required>
+                                <option value="">Select a recipient...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Amount ($)</label>
+                            <input type="number" id="amount" name="amount" step="0.01" min="0.01" required placeholder="0.00">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"/>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                            <span>Send Transfer</span>
+                        </button>
+                    </form>
+                    <div id="transfer-message" class="message hidden"></div>
+                </div>
+
+                <!-- Deposit Form -->
+                <div id="deposit-card" class="card deposit-card glass hidden">
+                    <div class="card-header">
+                        <h2>Deposit Funds</h2>
+                        <button id="close-deposit" class="btn btn-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <form id="deposit-form">
+                        <div class="form-group">
+                            <label for="deposit-amount">Amount ($)</label>
+                            <input type="number" id="deposit-amount" name="amount" step="0.01" min="0.01" required placeholder="0.00">
+                        </div>
+                        <button type="submit" class="btn btn-success btn-full">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <polyline points="19 12 12 19 5 12"/>
+                            </svg>
+                            <span>Deposit Funds</span>
+                        </button>
+                    </form>
+                    <div id="deposit-message" class="message hidden"></div>
+                </div>
+
+                <!-- Transaction History -->
+                <div class="card history-card glass">
+                    <div class="card-header">
+                        <h2>Transaction History</h2>
+                        <button id="refresh-history" class="btn btn-icon" title="Refresh History">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 4v6h-6"/>
+                                <path d="M1 20v-6h6"/>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="transactions-list" class="transactions-list">
+                        <div class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                                <rect x="9" y="3" width="6" height="4" rx="2"/>
+                                <path d="M9 12h6"/>
+                                <path d="M9 16h6"/>
+                            </svg>
+                            <p>No transactions yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="dashboard-footer">
+            <p>Atomic Wallet • Secure Thread-Safe Transfers • Built with Django & PostgreSQL</p>
+        </footer>
+    </section>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
