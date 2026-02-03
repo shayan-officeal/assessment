@@ -100,10 +100,23 @@ async function apiRequest(endpoint, options = {}) {
             credentials: 'include'
         });
 
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status} ${response.statusText}`);
+            }
+            // For successful non-JSON responses, return empty object
+            return {};
+        }
+
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error || data.detail || 'Request failed');
+            // Handle error responses
+            const errorMessage = data.error || data.detail ||
+                (typeof data === 'object' ? JSON.stringify(data) : 'Request failed');
+            throw new Error(errorMessage);
         }
 
         return data;

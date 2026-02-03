@@ -87,8 +87,12 @@ class TransferView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        # Trigger async receipt generation
-        generate_transaction_receipt.delay(transaction_record.id)
+        # Trigger async receipt generation (optional - fails gracefully if Celery not running)
+        try:
+            generate_transaction_receipt.delay(transaction_record.id)
+        except Exception:
+            # Celery/Redis not running - receipt generation will be skipped
+            pass
         
         # Refresh sender wallet to get updated balance
         sender_wallet = Wallet.objects.get(user=sender)
