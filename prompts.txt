@@ -1,0 +1,57 @@
+# AI Prompts Used for Development
+
+**Agent**: Gemini CLI - Antigravity
+**Platform**: Google Gemini Advanced
+
+## Prompt 1 (Initial Request)
+
+```
+@[Django Assessment.pdf] it's a assessment, implement it following industry standards and best practices
+```
+
+This was the initial prompt that included the PDF assessment document. The AI agent:
+1. Extracted text from the PDF to understand requirements
+2. Created a comprehensive implementation plan
+3. Identified the need for PostgreSQL and Redis
+4. Designed the architecture for atomic, thread-safe transfers
+
+## Prompt 2 (Environment Setup)
+
+```
+no, i don't have PostgreSQL and Redis
+```
+
+The AI agent then:
+1. Attempted to install PostgreSQL and Redis via winget
+2. Successfully installed Redis
+3. PostgreSQL installation faced 403 errors, requiring manual installation
+
+## Prompt 3 (Continue After Manual Setup)
+
+```
+i configured PostgresSQL manually, created database with name 'assessment' update configurations in settings.py, i also updated postgreeSQL version to 18, you were using 16
+
+continue implementation
+```
+
+The AI agent then proceeded to:
+1. Create all project files (models, views, serializers, tasks)
+2. Set up Celery configuration
+3. Write comprehensive test suites
+4. Create documentation
+
+---
+
+## Summary
+
+The prompts were **atomic** - each prompt was minimal and focused:
+1. Initial request with the assessment document
+2. Environment clarification
+3. Manual setup notification and continue
+
+The AI agent handled the **molecular** complexity internally by:
+- Breaking down the assessment requirements into subtasks
+- Creating a structured implementation plan
+- Implementing thread-safety with `select_for_update`
+- Writing comprehensive tests including concurrency tests
+- Generating all documentation
