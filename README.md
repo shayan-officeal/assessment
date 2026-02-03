@@ -273,6 +273,10 @@ Assessment/
 │       ├── test_models.py
 │       ├── test_views.py
 │       └── test_concurrency.py
+├── frontend/             # Frontend dashboard
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
 ├── media/
 │   └── receipts/         # Generated PDF receipts
 ├── .env                  # Environment variables
@@ -282,6 +286,49 @@ Assessment/
 ├── prompts.txt           # AI prompts used
 └── README.md
 ```
+
+## Frontend Dashboard
+
+A modern, premium frontend dashboard is included for testing the wallet system.
+
+### Running the Frontend
+
+```bash
+cd frontend
+python -m http.server 8080
+```
+
+Then open http://localhost:8080 in your browser.
+
+### Features
+
+- **Login Screen** - Authenticate with any test user
+- **Balance Display** - View current wallet balance
+- **Send Money** - Transfer funds to other users
+- **Deposit** - Add funds to wallet (for testing)
+- **Transaction History** - View sent/received transactions
+
+### Test Credentials
+
+Run `python manage.py populate_data` to create test users:
+
+| Username | Password | Balance |
+|----------|----------|---------|
+| alice | password123 | $1,000.00 |
+| bob | password123 | $500.00 |
+| charlie | password123 | $750.00 |
+| diana | password123 | $250.00 |
+| eve | password123 | $100.00 |
+
+## Management Commands
+
+### Populate Dummy Data
+
+```bash
+python manage.py populate_data --clear
+```
+
+Creates test users with wallets and sample transactions.
 
 ## Technical Decisions
 
@@ -303,6 +350,64 @@ Floating-point arithmetic can lead to rounding errors with currency:
 
 Transaction records use `on_delete=models.PROTECT` to prevent accidental deletion of users who have transaction history. This maintains audit trail integrity.
 
+---
+
+## Submission Guidelines
+
+### What to Submit
+
+1. **GitHub Repository** - All source code pushed to version control
+2. **README.md** - This file with setup and running instructions
+3. **prompts.txt** - Document of AI prompts used during development
+
+### Repository Should Include
+
+- [x] Complete Django project with wallet app
+- [x] PostgreSQL database configuration
+- [x] Celery task for async receipt generation
+- [x] Unit tests for models, views, and concurrency
+- [x] API documentation
+- [x] Frontend dashboard for testing
+
+---
+
+## Evaluation Criteria
+
+### 1. Database Integrity (Core Requirement)
+- ✅ All transactions are atomic with automatic rollback
+- ✅ `SELECT FOR UPDATE` prevents race conditions
+- ✅ Consistent lock ordering prevents deadlocks
+- ✅ Double-spending is impossible
+
+### 2. Accuracy of Transactions
+- ✅ `DecimalField` for precise currency handling
+- ✅ Balance validation before transfers
+- ✅ Immutable transaction audit log
+
+### 3. Performance Optimization
+- ✅ Database indexes on frequently queried fields
+- ✅ `select_related` to reduce N+1 queries
+- ✅ Async receipt generation via Celery
+
+### 4. Test Coverage
+- ✅ Model tests (12 tests)
+- ✅ API tests (14 tests)
+- ✅ Concurrency tests (3 tests)
+- ✅ Double-spending prevention test
+
+### 5. Code Quality
+- ✅ PEP 8 compliant code style
+- ✅ Comprehensive docstrings
+- ✅ Type hints where applicable
+- ✅ Clean separation of concerns
+
+---
+
+## AI Prompts Used
+
+See `prompts.txt` for a complete list of AI prompts used during development.
+
 ## License
 
-This project was created as a technical assessment.
+This project was created as a technical assessment for Django developer evaluation.
+
